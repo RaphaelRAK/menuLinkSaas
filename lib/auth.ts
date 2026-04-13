@@ -1,6 +1,8 @@
 import {
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   sendPasswordResetEmail,
   type User,
@@ -37,6 +39,14 @@ export async function signUpWithEmail(email: string, password: string): Promise<
 export async function signInWithEmail(email: string, password: string): Promise<User> {
   const auth = getFirebaseAuth()
   const { user } = await signInWithEmailAndPassword(auth, email, password)
+  setAuthCookie()
+  return user
+}
+
+export async function signInWithGoogle(): Promise<User> {
+  const auth = getFirebaseAuth()
+  const provider = new GoogleAuthProvider()
+  const { user } = await signInWithPopup(auth, provider)
   setAuthCookie()
   return user
 }

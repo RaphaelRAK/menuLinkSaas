@@ -15,6 +15,7 @@ import { getFirestoreDb } from '@/lib/firebase'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { OAuthButtons, type OAuthProviderName } from '@/components/auth/OAuthButtons'
 
 const schema = z.object({
   email:    z.string().email('Email invalide'),
@@ -52,9 +53,10 @@ function isSafeRedirect(path: string | null): path is string {
 function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { signIn } = useAuth()
+  const { signIn, signInWithGoogle } = useAuth()
   const [showPassword, setShowPassword] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
+  const [loadingProvider, setLoadingProvider] = React.useState<OAuthProviderName | null>(null)
 
   const {
     register,
@@ -66,20 +68,35 @@ function LoginForm() {
     setIsLoading(true)
     try {
       const user = await signIn(values.email, values.password)
-
-      const redirectParam = searchParams.get('redirect')
-      if (isSafeRedirect(redirectParam)) {
-        router.push(redirectParam)
-        return
-      }
-
-      const published = await hasPublishedRestaurant(user.uid)
-      router.push(published ? '/dashboard' : '/onboarding')
+      await finishLoginRedirect(user.uid)
     } catch (err: unknown) {
       const code = (err as { code?: string })?.code ?? ''
       toast.error(getFirebaseAuthError(code))
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const finishLoginRedirect = async (uid: string) => {
+    const redirectParam = searchParams.get('redirect')
+    if (isSafeRedirect(redirectParam)) {
+      router.push(redirectParam)
+      return
+    }
+    const published = await hasPublishedRestaurant(uid)
+    router.push(published ? '/dashboard' : '/onboarding')
+  }
+
+  const handleGoogleLogin = async () => {
+    setLoadingProvider('google')
+    try {
+      const user = await signInWithGoogle()
+      await finishLoginRedirect(user.uid)
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code ?? ''
+      toast.error(getFirebaseAuthError(code))
+    } finally {
+      setLoadingProvider(null)
     }
   }
 
@@ -91,6 +108,11 @@ function LoginForm() {
           Accédez à votre espace restaurateur.
         </p>
       </div>
+
+      <OAuthButtons
+        loadingProvider={loadingProvider}
+        onGoogle={handleGoogleLogin}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <div className="space-y-1.5">

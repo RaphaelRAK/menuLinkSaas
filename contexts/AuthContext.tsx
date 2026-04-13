@@ -3,13 +3,21 @@
 import * as React from 'react'
 import { onAuthStateChanged, type User } from 'firebase/auth'
 import { getFirebaseAuth } from '@/lib/firebase'
-import { setAuthCookie, clearAuthCookie, signInWithEmail, signUpWithEmail, signOutUser } from '@/lib/auth'
+import {
+  clearAuthCookie,
+  setAuthCookie,
+  signInWithEmail,
+  signInWithGoogle,
+  signOutUser,
+  signUpWithEmail,
+} from '@/lib/auth'
 
 interface AuthContextValue {
   user: User | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<User>
   signUp: (email: string, password: string) => Promise<User>
+  signInWithGoogle: () => Promise<User>
   signOut: () => Promise<void>
 }
 
@@ -40,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     signIn: signInWithEmail,
     signUp: signUpWithEmail,
+    signInWithGoogle,
     signOut: signOutUser,
   }
 

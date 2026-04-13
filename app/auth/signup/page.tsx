@@ -13,6 +13,7 @@ import { getFirebaseAuthError } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { OAuthButtons, type OAuthProviderName } from '@/components/auth/OAuthButtons'
 
 const schema = z
   .object({
@@ -29,9 +30,10 @@ type FormValues = z.infer<typeof schema>
 
 export default function SignupPage() {
   const router = useRouter()
-  const { signUp } = useAuth()
+  const { signUp, signInWithGoogle } = useAuth()
   const [showPassword, setShowPassword] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
+  const [loadingProvider, setLoadingProvider] = React.useState<OAuthProviderName | null>(null)
 
   const {
     register,
@@ -53,6 +55,20 @@ export default function SignupPage() {
     }
   }
 
+  const handleGoogleSignup = async () => {
+    setLoadingProvider('google')
+    try {
+      await signInWithGoogle()
+      toast.success('Bienvenue sur Navo.')
+      router.push('/onboarding')
+    } catch (err: unknown) {
+      const code = (err as { code?: string })?.code ?? ''
+      toast.error(getFirebaseAuthError(code))
+    } finally {
+      setLoadingProvider(null)
+    }
+  }
+
   return (
     <>
       <div className="mb-6 text-center">
@@ -61,6 +77,11 @@ export default function SignupPage() {
           Commencez à référencer votre restaurant gratuitement.
         </p>
       </div>
+
+      <OAuthButtons
+        loadingProvider={loadingProvider}
+        onGoogle={handleGoogleSignup}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
         <div className="space-y-1.5">
