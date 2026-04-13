@@ -5,51 +5,51 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   UtensilsCrossed, QrCode, Clock, ImageIcon, BarChart3, HeadphonesIcon,
-  Check, ChevronDown, ArrowRight, Star, Menu, X,
+  Check, ChevronDown, ArrowRight, Menu, X, Smartphone, RefreshCw, MapPin,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data
 // ─────────────────────────────────────────────────────────────────────────────
 
-const STATS = [
-  { value: '+2 400', label: 'restaurants référencés' },
-  { value: '4.9/5', label: 'satisfaction client' },
-  { value: '30 jours', label: "d'essai offerts" },
+const VALUE_PROPS = [
+  { value: 'Mise en ligne rapide', label: 'De votre inscription à votre page publiée, en quelques minutes' },
+  { value: 'Essai sans risque', label: '30 jours d\'accès complet, sans carte bancaire requise' },
+  { value: 'Sans engagement', label: 'Résiliez à tout moment, sans frais ni préavis' },
 ]
 
 const STEPS = [
   {
     number: '01',
     title: 'Créez votre compte',
-    description: 'Inscrivez-vous en moins de 2 minutes. Aucune carte bancaire nécessaire pour démarrer votre essai.',
+    description: 'Inscrivez-vous en quelques minutes. Aucune carte bancaire nécessaire pour démarrer votre essai.',
   },
   {
     number: '02',
     title: 'Configurez votre restaurant',
-    description: 'Renseignez vos informations, horaires, menu complet et uploadez vos plus belles photos.',
+    description: 'Renseignez vos informations, vos horaires, votre menu complet et ajoutez vos photos.',
   },
   {
     number: '03',
-    title: 'Publiez et attirez des clients',
-    description: 'Votre page est en ligne. Partagez votre lien MenuLink sur vos réseaux, en QR code sur vos tables.',
+    title: 'Publiez et rendez-vous visible',
+    description: 'Votre page est en ligne. Partagez votre lien MenuLink sur vos réseaux et affichez votre QR code en salle.',
   },
 ]
 
 const FEATURES = [
   { icon: UtensilsCrossed, title: 'Menu en ligne complet', description: 'Catégories, descriptions, allergènes, variantes de prix. Un menu toujours à jour, accessible en un clic.' },
-  { icon: QrCode, title: 'QR Code personnalisé', description: 'Générez votre QR code MenuLink à imprimer sur vos tables, cartes de visite et supports physiques.' },
-  { icon: Clock, title: 'Horaires dynamiques', description: 'Gérez vos heures jour par jour, service du midi et du soir, jours fériés. Vos clients savent toujours quand venir.' },
-  { icon: ImageIcon, title: 'Photos haute définition', description: 'Logo, photo de couverture, galerie plats. Une présentation visuelle qui donne faim avant même d\'arriver.' },
-  { icon: BarChart3, title: 'Statistiques & insights', description: 'Suivez les visites de votre page, les plats les plus consultés et optimisez votre offre.' },
-  { icon: HeadphonesIcon, title: 'Support dédié', description: 'Une équipe disponible 7j/7 par chat et email. Nous sommes là pour vous accompagner à chaque étape.' },
+  { icon: QrCode, title: 'QR Code à imprimer', description: 'Générez votre QR code MenuLink et imprimez-le sur vos tables, cartes de visite et supports physiques.' },
+  { icon: Clock, title: 'Horaires dynamiques', description: "Gérez vos horaires jour par jour, service du midi et du soir, jours fériés. Vos clients savent toujours quand venir." },
+  { icon: ImageIcon, title: 'Photos haute définition', description: "Logo, photo de couverture, galerie de plats. Une présentation visuelle soignée, optimisée pour mobile." },
+  { icon: BarChart3, title: 'Statistiques de visites', description: 'Suivez les visites de votre page et les plats les plus consultés pour affiner votre offre.' },
+  { icon: HeadphonesIcon, title: 'Support réactif', description: 'Une équipe disponible par chat et email pour vous accompagner à chaque étape de la configuration.' },
 ]
 
 const PLANS = [
   {
     name: 'Starter',
     price: '29',
-    description: 'Pour démarrer et tester le potentiel de votre présence en ligne.',
+    description: 'Pour créer votre première présence en ligne sans complexité.',
     features: [
       '1 page restaurant',
       'Menu en ligne (illimité)',
@@ -58,29 +58,29 @@ const PLANS = [
       'QR code standard',
       'Support par email',
     ],
-    cta: "Commencer l'essai",
+    cta: 'Commencer l\'essai gratuit',
     highlighted: false,
   },
   {
     name: 'Pro',
     price: '59',
-    description: 'Le plan préféré des restaurateurs actifs qui veulent se démarquer.',
+    description: 'Pour une présence complète avec statistiques et outils avancés.',
     features: [
       'Tout le plan Starter',
       'Photos illimitées',
       'Statistiques de visites',
       'QR code personnalisé',
-      'Badge "Certifié MenuLink"',
-      'Support prioritaire 7j/7',
+      'Badge MenuLink vérifié',
+      'Support prioritaire',
     ],
-    cta: "Commencer l'essai",
+    cta: 'Commencer l\'essai gratuit',
     highlighted: true,
-    badge: 'Populaire',
+    badge: 'Recommandé',
   },
   {
     name: 'Business',
     price: '99',
-    description: 'Pour les établissements multiples et les groupes de restauration.',
+    description: 'Pour les groupes et les établissements multiples.',
     features: [
       'Tout le plan Pro',
       "Jusqu'à 5 établissements",
@@ -89,32 +89,26 @@ const PLANS = [
       'Analytics avancés',
       'Gestionnaire de compte dédié',
     ],
-    cta: "Commencer l'essai",
+    cta: 'Commencer l\'essai gratuit',
     highlighted: false,
   },
 ]
 
-const TESTIMONIALS = [
+const BENEFITS = [
   {
-    quote: "MenuLink a transformé notre relation avec les clients. Notre page est devenue notre meilleure vitrine — mieux qu'Instagram pour convertir de nouveaux couverts.",
-    name: 'Sophie Marchand',
-    role: 'Propriétaire, Le Zinc Parisien',
-    photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
-    stars: 5,
+    icon: RefreshCw,
+    title: 'Votre menu mis à jour en temps réel',
+    description: 'Un prix qui change, un plat du jour à ajouter : modifiez depuis votre téléphone et la mise à jour est visible immédiatement sur votre page. Pas d\'agence, pas d\'attente.',
   },
   {
-    quote: "En moins d'une semaine on avait notre menu en ligne, notre QR code sur les tables et nos premières réservations via le lien MenuLink. ROI immédiat.",
-    name: 'Karim Bensalem',
-    role: 'Chef & fondateur, Brasserie Atlas',
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80',
-    stars: 5,
+    icon: Smartphone,
+    title: 'Une carte lisible sur tous les téléphones',
+    description: 'Votre menu s\'affiche clairement sur mobile, sans téléchargement d\'application. Vos clients trouvent ce qu\'ils cherchent en quelques secondes.',
   },
   {
-    quote: "Le support est exceptionnel. À chaque question, une réponse en moins d'une heure. Je recommande MenuLink à tous les restaurateurs que je connais.",
-    name: 'Amélie Fontaine',
-    role: 'Gérante, Les Saveurs du Marché',
-    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&q=80',
-    stars: 5,
+    icon: MapPin,
+    title: 'Toutes vos infos centralisées en un lien',
+    description: 'Menu, horaires, adresse, photos, accès Google — tout sur une seule page. Un lien à partager partout : Instagram, WhatsApp, Google My Business, cartes de visite.',
   },
 ]
 
@@ -133,16 +127,16 @@ const FAQ_ITEMS = [
   },
   {
     question: "Mes données sont-elles sécurisées ?",
-    answer: "Vos données sont hébergées en Europe (serveurs Firebase/Google Cloud EU) et chiffrées en transit et au repos. Nous ne revendons jamais vos données ni celles de vos clients.",
+    answer: "Vos données sont hébergées en Europe et chiffrées en transit et au repos. Nous ne revendons jamais vos données ni celles de vos clients.",
   },
   {
     question: "Proposez-vous un accompagnement à la prise en main ?",
-    answer: "Oui. En plus de notre documentation complète, nos clients Pro et Business bénéficient d'une session d'onboarding individuelle avec un membre de notre équipe pour configurer leur page optimalement.",
+    answer: "Oui. Notre équipe est disponible par chat et email pour vous aider à configurer votre page. Les clients Pro et Business bénéficient d'une session d'onboarding individuelle.",
   },
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Sub-components (all inline, self-contained)
+// Sub-components
 // ─────────────────────────────────────────────────────────────────────────────
 
 function FAQItem({ question, answer }: { question: string; answer: string }) {
@@ -191,9 +185,7 @@ export default function LandingPage() {
       <header
         className={[
           'fixed top-0 inset-x-0 z-50 transition-all duration-300',
-          scrolled
-            ? 'bg-white/90 backdrop-blur-md shadow-sm'
-            : 'bg-transparent',
+          scrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent',
         ].join(' ')}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -206,17 +198,21 @@ export default function LandingPage() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {['Fonctionnalités', 'Tarifs'].map((label) => (
-              <a
-                key={label}
-                href={`#${label.toLowerCase()}`}
+            {[
+              { label: 'Fonctionnalités', href: '/fonctionnalites' },
+              { label: 'Comment ça marche', href: '/comment-ca-marche' },
+              { label: 'Tarifs', href: '/tarifs' },
+            ].map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
                 className={[
                   'text-sm font-medium transition-colors hover:text-[var(--brand)]',
                   scrolled ? 'text-[#141412]' : 'text-white/90',
                 ].join(' ')}
               >
                 {label}
-              </a>
+              </Link>
             ))}
             <Link
               href="/auth/login"
@@ -231,7 +227,7 @@ export default function LandingPage() {
               href="/auth/signup"
               className="text-sm font-semibold bg-[var(--brand)] hover:bg-[var(--brand-hover)] text-white px-4 py-2 rounded-full transition-colors"
             >
-              Essayer 30 jours gratuits
+              Essayer gratuitement
             </Link>
           </nav>
 
@@ -247,14 +243,16 @@ export default function LandingPage() {
         {/* Mobile nav drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-border px-6 py-4 flex flex-col gap-4">
-            <a href="#fonctionnalités" className="text-sm font-medium py-2">Fonctionnalités</a>
-            <a href="#tarifs" className="text-sm font-medium py-2">Tarifs</a>
-            <Link href="/auth/login" className="text-sm font-medium py-2">Connexion</Link>
+            <Link href="/fonctionnalites" className="text-sm font-medium py-2" onClick={() => setMobileMenuOpen(false)}>Fonctionnalités</Link>
+            <Link href="/comment-ca-marche" className="text-sm font-medium py-2" onClick={() => setMobileMenuOpen(false)}>Comment ça marche</Link>
+            <Link href="/tarifs" className="text-sm font-medium py-2" onClick={() => setMobileMenuOpen(false)}>Tarifs</Link>
+            <Link href="/auth/login" className="text-sm font-medium py-2" onClick={() => setMobileMenuOpen(false)}>Connexion</Link>
             <Link
               href="/auth/signup"
               className="text-sm font-semibold bg-[var(--brand)] text-white text-center px-4 py-3 rounded-xl"
+              onClick={() => setMobileMenuOpen(false)}
             >
-              Essayer 30 jours gratuits
+              Essayer gratuitement
             </Link>
           </div>
         )}
@@ -269,14 +267,13 @@ export default function LandingPage() {
           priority
           className="object-cover"
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/20" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 w-full">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90 mb-8">
-              <span className="size-2 rounded-full bg-[var(--success)]" />
-              +2 400 restaurants nous font confiance
+              <span className="size-2 rounded-full bg-[var(--success)] animate-pulse" />
+              Accès anticipé ouvert — essai gratuit 30 jours
             </div>
 
             <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight mb-6">
@@ -285,8 +282,8 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-lg md:text-xl text-white/80 leading-relaxed mb-10 max-w-xl">
-              Menu en ligne, QR code, horaires, photos. Tout ce qu'il faut pour convertir
-              un internaute en client. Professionnel, rapide, rentable.
+              Menu en ligne, QR code, horaires, photos — tout ce qu'il faut pour que vos clients
+              trouvent l'essentiel en quelques secondes, depuis leur téléphone.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
@@ -294,14 +291,14 @@ export default function LandingPage() {
                 href="/auth/signup"
                 className="inline-flex items-center justify-center gap-2 bg-[var(--brand)] hover:bg-[var(--brand-hover)] text-white font-semibold px-7 py-3.5 rounded-full transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                Démarrer mon essai gratuit
+                Créer ma page gratuitement
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                href="/auth/login"
+                href="/comment-ca-marche"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-medium px-7 py-3.5 rounded-full transition-colors"
               >
-                J'ai déjà un compte
+                Voir comment ça marche
               </Link>
             </div>
 
@@ -312,14 +309,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Stats bar ───────────────────────────────────────────────────── */}
+      {/* ── Value props bar ─────────────────────────────────────────────── */}
       <section className="bg-[var(--brand)] text-white py-10">
         <div className="max-w-4xl mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-            {STATS.map(({ value, label }) => (
-              <div key={label}>
-                <div className="font-heading text-4xl font-black mb-1">{value}</div>
-                <div className="text-white/75 text-sm font-medium">{label}</div>
+            {VALUE_PROPS.map(({ value, label }) => (
+              <div key={value}>
+                <div className="font-heading text-xl font-black mb-1">{value}</div>
+                <div className="text-white/75 text-sm font-medium leading-snug">{label}</div>
               </div>
             ))}
           </div>
@@ -333,14 +330,12 @@ export default function LandingPage() {
             <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">En 3 étapes</p>
             <h2 className="font-heading text-4xl md:text-5xl font-black tracking-tight">
               De zéro à en ligne
-              <span className="block text-[var(--brand)]">en moins d'une heure</span>
+              <span className="block text-[var(--brand)]">en quelques minutes</span>
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connecting line (desktop only) */}
             <div className="hidden md:block absolute top-10 left-[calc(16.66%+2rem)] right-[calc(16.66%+2rem)] h-px bg-[#e8e4dc] z-0" />
-
             {STEPS.map((step, i) => (
               <div key={i} className="relative z-10 flex flex-col items-center text-center">
                 <div className="size-20 rounded-2xl bg-[var(--brand-light)] border-2 border-[var(--brand)]/20 flex items-center justify-center mb-6">
@@ -355,7 +350,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features ────────────────────────────────────────────────────── */}
-      <section id="fonctionnalités" className="py-24 px-6 bg-[#f5f2ec]">
+      <section className="py-24 px-6 bg-[#f5f2ec]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Fonctionnalités</p>
@@ -378,6 +373,16 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/fonctionnalites"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[var(--brand)] hover:underline"
+            >
+              Voir toutes les fonctionnalités
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -399,13 +404,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── Pricing ─────────────────────────────────────────────────────── */}
-      <section id="tarifs" className="py-24 px-6 bg-white">
+      <section className="py-24 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Tarifs</p>
             <h2 className="font-heading text-4xl md:text-5xl font-black tracking-tight">
-              Un investissement,
-              <span className="block text-[var(--brand)]">des clients en retour</span>
+              Un abonnement simple,
+              <span className="block text-[var(--brand)]">sans surprise</span>
             </h2>
             <p className="text-muted-foreground mt-4 max-w-md mx-auto">
               30 jours d'essai gratuit sur tous les plans. Sans carte bancaire.
@@ -463,48 +468,44 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/tarifs"
+              className="inline-flex items-center gap-2 text-sm font-medium text-[var(--brand)] hover:underline"
+            >
+              Comparer les plans en détail
+              <ArrowRight className="size-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ── Testimonials ────────────────────────────────────────────────── */}
+      {/* ── Benefits ────────────────────────────────────────────────────── */}
       <section className="py-24 px-6 bg-[#141412] text-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Ils nous font confiance</p>
+            <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Pour votre établissement</p>
             <h2 className="font-heading text-4xl md:text-5xl font-black tracking-tight text-white">
-              Ce que disent nos restaurateurs
+              Ce que MenuLink
+              <span className="block text-[var(--brand)]">vous apporte concrètement</span>
             </h2>
+            <p className="text-white/60 mt-4 max-w-md mx-auto text-sm leading-relaxed">
+              Pas de complexité technique, pas d'agence à gérer. Vous prenez en main votre présence en ligne directement.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
+            {BENEFITS.map(({ icon: Icon, title, description }) => (
               <div
-                key={t.name}
+                key={title}
                 className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:bg-white/10 hover:border-white/20 transition-all duration-200"
               >
-                <div className="flex gap-0.5 mb-5">
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} className="size-4 fill-[var(--brand)] text-[var(--brand)]" />
-                  ))}
+                <div className="size-12 rounded-xl bg-[var(--brand)]/15 flex items-center justify-center mb-5">
+                  <Icon className="size-5 text-[var(--brand)]" />
                 </div>
-                <blockquote className="text-white/85 text-sm leading-relaxed mb-6 italic">
-                  "{t.quote}"
-                </blockquote>
-                <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-full overflow-hidden shrink-0 border-2 border-white/20">
-                    <Image
-                      src={t.photo}
-                      alt={t.name}
-                      width={40}
-                      height={40}
-                      className="size-full object-cover"
-                    />
-                  </div>
-                  <div>
-                    <div className="font-semibold text-sm text-white">{t.name}</div>
-                    <div className="text-white/50 text-xs">{t.role}</div>
-                  </div>
-                </div>
+                <h3 className="font-heading font-bold text-lg mb-3 text-white">{title}</h3>
+                <p className="text-white/60 text-sm leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
@@ -528,26 +529,25 @@ export default function LandingPage() {
 
       {/* ── Final CTA ───────────────────────────────────────────────────── */}
       <section className="py-28 px-6 bg-[var(--brand)] text-white text-center relative overflow-hidden">
-        {/* Decorative background circles */}
         <div className="absolute -top-20 -left-20 size-80 rounded-full bg-white/5" />
         <div className="absolute -bottom-24 -right-16 size-96 rounded-full bg-white/5" />
 
         <div className="relative z-10 max-w-2xl mx-auto">
           <h2 className="font-heading text-4xl md:text-5xl font-black mb-5 leading-tight">
-            Votre restaurant mérite
-            <br />d'être trouvé.
+            Votre carte en ligne,
+            <br />dès aujourd'hui.
           </h2>
           <p className="text-white/80 text-lg mb-10 max-w-lg mx-auto">
-            Rejoignez +2 400 restaurateurs qui ont choisi MenuLink pour développer leur clientèle en ligne.
+            Créez votre page restaurant en quelques minutes. Sans agence, sans complexité technique, sans carte bancaire pour démarrer.
           </p>
           <Link
             href="/auth/signup"
             className="inline-flex items-center gap-2 bg-white text-[var(--brand)] font-bold px-8 py-4 rounded-full hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98] text-base"
           >
-            Démarrer mon essai gratuit de 30 jours
+            Créer ma page gratuitement
             <ArrowRight className="size-5" />
           </Link>
-          <p className="mt-4 text-sm text-white/60">Sans engagement · Résiliation en 1 clic</p>
+          <p className="mt-4 text-sm text-white/60">30 jours d'essai · Sans engagement · Résiliation en 1 clic</p>
         </div>
       </section>
 
@@ -558,7 +558,7 @@ export default function LandingPage() {
             <div className="max-w-xs">
               <span className="font-heading font-black text-xl text-[var(--brand)] block mb-3">MenuLink</span>
               <p className="text-sm leading-relaxed">
-                La plateforme qui connecte les restaurateurs à leurs futurs clients. Simple, puissant, rentable.
+                La plateforme qui simplifie la présence en ligne des restaurateurs.
               </p>
             </div>
 
@@ -566,9 +566,9 @@ export default function LandingPage() {
               <div>
                 <p className="font-semibold text-white mb-3">Produit</p>
                 <ul className="space-y-2">
-                  <li><a href="#fonctionnalités" className="hover:text-white transition-colors">Fonctionnalités</a></li>
-                  <li><a href="#tarifs" className="hover:text-white transition-colors">Tarifs</a></li>
-                  <li><Link href="/auth/signup" className="hover:text-white transition-colors">Essai gratuit</Link></li>
+                  <li><Link href="/fonctionnalites" className="hover:text-white transition-colors">Fonctionnalités</Link></li>
+                  <li><Link href="/comment-ca-marche" className="hover:text-white transition-colors">Comment ça marche</Link></li>
+                  <li><Link href="/tarifs" className="hover:text-white transition-colors">Tarifs</Link></li>
                 </ul>
               </div>
               <div>
