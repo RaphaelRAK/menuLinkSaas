@@ -6,8 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useOnboardingStore } from '@/stores/onboardingStore'
 import {
-  Form, FormField, FormItem, FormLabel, FormControl, FormMessage,
+  Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription,
 } from '@/components/ui/form'
+import { useAuth } from '@/contexts/AuthContext'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -29,6 +30,8 @@ export type Step2Ref = { validate: () => Promise<boolean> }
 
 export const Step2Location = React.forwardRef<Step2Ref>((_, ref) => {
   const { formData, updateFormData } = useOnboardingStore()
+  const { user } = useAuth()
+  const accountEmail = user?.email ?? ''
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -40,10 +43,17 @@ export const Step2Location = React.forwardRef<Step2Ref>((_, ref) => {
         country: formData.address?.country ?? 'France',
       },
       phone:   formData.phone   ?? '',
-      email:   formData.email   ?? '',
+      email:   (formData.email as string | undefined)?.trim() || accountEmail,
       website: formData.website ?? '',
     },
   })
+
+  React.useEffect(() => {
+    const current = form.getValues('email')
+    if (!current?.trim() && accountEmail) {
+      form.setValue('email', accountEmail)
+    }
+  }, [accountEmail, form])
 
   React.useImperativeHandle(ref, () => ({
     validate: async () => {
@@ -151,6 +161,11 @@ export const Step2Location = React.forwardRef<Step2Ref>((_, ref) => {
                     <FormControl>
                       <Input placeholder="contact@monrestaurant.fr" type="email" {...field} />
                     </FormControl>
+                    {accountEmail ? (
+                      <FormDescription>
+                        Pré-rempli depuis votre compte ; modifiez-le si l&apos;email du restaurant est différent.
+                      </FormDescription>
+                    ) : null}
                     <FormMessage />
                   </FormItem>
                 )}

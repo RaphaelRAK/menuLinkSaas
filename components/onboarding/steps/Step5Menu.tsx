@@ -149,7 +149,7 @@ function ItemSheet({ open, onClose, onSave, initial, categoryName, ensureRestaur
 
   return (
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
-      <SheetContent className="w-full sm:max-w-xl lg:max-w-2xl overflow-y-auto">
+      <SheetContent className="w-full lg:max-w-3xl overflow-y-auto">
         <SheetHeader>
           <SheetTitle>{initial ? `Modifier le ${itemLabel}` : `Nouveau ${itemLabel}`}</SheetTitle>
         </SheetHeader>

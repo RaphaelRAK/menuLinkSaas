@@ -6,7 +6,6 @@ import {
   getDocs,
   query,
   where,
-  orderBy,
   serverTimestamp,
   limit,
 } from 'firebase/firestore'
@@ -56,13 +55,13 @@ export async function updateRestaurant(id: string, data: Partial<Restaurant>): P
   })
 }
 
-export async function getLatestDraftRestaurantForOwner(ownerId: string): Promise<{ id: string; data: Partial<Restaurant> } | null> {
+/** Restaurant du compte (brouillon ou publié), 1 compte = 1 fiche. */
+export async function getLatestRestaurantForOwner(ownerId: string): Promise<{ id: string; data: Partial<Restaurant> } | null> {
   const db = getFirestoreDb()
+  // Pas de orderBy → pas besoin d'index composite ; un seul restaurant par compte.
   const q = query(
     collection(db, 'restaurants'),
     where('ownerId', '==', ownerId),
-    where('isPublished', '==', false),
-    orderBy('updatedAt', 'desc'),
     limit(1)
   )
   const snap = await getDocs(q)
