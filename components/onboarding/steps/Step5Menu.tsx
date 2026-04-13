@@ -15,7 +15,6 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import type { MenuCategory, MenuItem } from '@/types/restaurant'
@@ -148,13 +147,15 @@ function ItemSheet({ open, onClose, onSave, initial, categoryName, ensureRestaur
   }
 
   return (
-    <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
-      <SheetContent className="w-full lg:max-w-3xl overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle>{initial ? `Modifier le ${itemLabel}` : `Nouveau ${itemLabel}`}</SheetTitle>
-        </SheetHeader>
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose() }}>
+      <DialogContent className="w-[min(96vw,1120px)] max-w-none sm:max-w-none max-h-[88vh] overflow-y-auto p-0">
+        <DialogHeader className="px-6 pt-6 pb-4">
+          <DialogTitle className="font-heading text-xl">
+            {initial ? `Modifier le ${itemLabel}` : `Nouveau ${itemLabel}`}
+          </DialogTitle>
+        </DialogHeader>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 mt-6 pb-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 px-6 pb-6">
           {/* Images */}
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3">
@@ -325,8 +326,8 @@ function ItemSheet({ open, onClose, onSave, initial, categoryName, ensureRestaur
             </Button>
           </div>
         </form>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   )
 }
 
