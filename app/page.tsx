@@ -164,6 +164,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
   )
 }
 
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Page
 // ─────────────────────────────────────────────────────────────────────────────
@@ -349,29 +350,168 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Features ────────────────────────────────────────────────────── */}
+      {/* ── Features bento ──────────────────────────────────────────────── */}
       <section className="py-24 px-6 bg-[#f5f2ec]">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Fonctionnalités</p>
             <h2 className="font-heading text-4xl md:text-5xl font-black tracking-tight">
               Tout pour briller en ligne
             </h2>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FEATURES.map(({ icon: Icon, title, description }) => (
-              <div
-                key={title}
-                className="bg-white rounded-2xl p-7 border border-[#e8e4dc] hover:border-[var(--brand)] hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group"
-              >
-                <div className="size-12 rounded-xl bg-[var(--brand-light)] flex items-center justify-center mb-5 group-hover:bg-[var(--brand)] transition-colors">
-                  <Icon className="size-5 text-[var(--brand)] group-hover:text-white transition-colors" />
+          {/* Bento grid — 3 cols × [220px 220px auto] on lg */}
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            style={{ gridTemplateRows: 'auto' }}
+          >
+
+            {/* ① Menu — hero card, spans 2 cols × 2 rows on lg */}
+            <div className="relative rounded-2xl overflow-hidden bg-white border border-[#e8e4dc] p-8 flex flex-col justify-between
+                            min-h-[340px] sm:col-span-2 lg:col-span-2 lg:row-span-2 lg:min-h-[456px]
+                            hover:shadow-lg hover:border-[var(--brand)]/30 transition-all duration-300 group">
+              {/* Decorative watermark icon */}
+              <UtensilsCrossed
+                className="absolute -right-6 -bottom-6 size-52 text-[#e8e4dc] transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
+                strokeWidth={1}
+              />
+              <div>
+                <div className="size-12 rounded-2xl bg-[var(--brand-light)] flex items-center justify-center mb-6">
+                  <UtensilsCrossed className="size-6 text-[var(--brand)]" />
                 </div>
-                <h3 className="font-heading font-bold text-lg mb-2">{title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+                <h3 className="font-heading text-2xl lg:text-3xl font-black mb-3">Menu en ligne complet</h3>
+                <p className="text-[#5a5a4e] leading-relaxed mb-6 max-w-sm">
+                  Catégories, descriptions, photos, allergènes, variantes de prix. Un menu modifiable depuis votre téléphone en quelques secondes — visible immédiatement par vos clients.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {['Catégories illimitées', '14 allergènes EU', 'Variantes & prix', 'Plat du jour'].map((tag) => (
+                    <span key={tag} className="text-xs bg-[var(--brand-light)] text-[var(--brand)] px-3 py-1 rounded-full font-semibold">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            ))}
+              {/* Mini menu preview */}
+              <div className="mt-8 space-y-2 relative z-10">
+                {[['Tartare de bœuf', 'Entrées', '18€'], ['Sole meunière', 'Plats', '28€'], ['Fondant chocolat', 'Desserts', '12€']].map(([name, cat, price]) => (
+                  <div key={name} className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-[#faf9f6] border border-[#e8e4dc] hover:border-[var(--brand)]/20 transition-colors">
+                    <div>
+                      <span className="text-sm font-medium text-[#141412]">{name}</span>
+                      <span className="ml-2 text-[10px] text-[#9a9a8e] font-medium">{cat}</span>
+                    </div>
+                    <span className="text-sm font-bold text-[var(--brand)]">{price}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ② QR Code — dark card */}
+            <div className="relative rounded-2xl overflow-hidden bg-[#141412] p-7 flex flex-col justify-between
+                            min-h-[200px] hover:bg-[#1e1e1c] transition-colors duration-300 group">
+              {/* QR corner marker decoration */}
+              <div className="absolute top-5 right-5 opacity-15 group-hover:opacity-25 transition-opacity">
+                <div className="relative size-12">
+                  <div className="absolute inset-0 border-[3px] border-white rounded-md" />
+                  <div className="absolute inset-[4px] border-[3px] border-white rounded-[3px]" />
+                  <div className="absolute inset-[9px] bg-white rounded-[1px]" />
+                </div>
+              </div>
+              <div className="size-11 rounded-xl bg-white/10 flex items-center justify-center mb-5">
+                <QrCode className="size-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-white mb-2">QR Code à imprimer</h3>
+                <p className="text-white/60 text-sm leading-relaxed">
+                  Générez et imprimez votre QR code en deux clics. Vos clients scannent, votre menu s'ouvre — sans application.
+                </p>
+              </div>
+            </div>
+
+            {/* ③ Horaires — warm card */}
+            <div className="relative rounded-2xl overflow-hidden bg-[var(--brand-light)] border border-[var(--brand)]/10 p-7 flex flex-col justify-between
+                            min-h-[200px] hover:border-[var(--brand)]/25 transition-all duration-300">
+              <div className="size-11 rounded-xl bg-white shadow-sm flex items-center justify-center mb-5">
+                <Clock className="size-5 text-[var(--brand)]" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-[#141412] mb-2">Horaires dynamiques</h3>
+                <p className="text-[#5a5a4e] text-sm leading-relaxed mb-4">
+                  Badge ouvert/fermé en temps réel. Configurez midi, soir et jours fériés.
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {[['Lun', true], ['Mar', true], ['Mer', true], ['Jeu', true], ['Ven', true], ['Sam', false], ['Dim', false]].map(([d, open]) => (
+                    <span key={String(d)} className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${open ? 'bg-[var(--success)]/15 text-[var(--success)]' : 'bg-white/60 text-[#9a9a8e]'}`}>
+                      {String(d)}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* ④ Photos */}
+            <div className="relative rounded-2xl overflow-hidden bg-white border border-[#e8e4dc] p-7 flex flex-col justify-between
+                            min-h-[200px] hover:border-[var(--brand)]/30 hover:shadow-md transition-all duration-300 group">
+              {/* Abstract color block decoration */}
+              <div className="absolute top-5 right-5 flex gap-1.5 opacity-20 group-hover:opacity-30 transition-opacity">
+                <div className="flex flex-col gap-1.5">
+                  <div className="w-7 h-11 bg-[var(--brand)] rounded-lg" />
+                  <div className="w-7 h-7 bg-[#141412] rounded-lg" />
+                </div>
+                <div className="flex flex-col gap-1.5 mt-5">
+                  <div className="w-7 h-7 bg-[var(--brand)]/40 rounded-lg" />
+                  <div className="w-7 h-11 bg-[#141412]/30 rounded-lg" />
+                </div>
+              </div>
+              <div className="size-11 rounded-xl bg-[var(--brand-light)] flex items-center justify-center mb-5">
+                <ImageIcon className="size-5 text-[var(--brand)]" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold mb-2">Photos haute définition</h3>
+                <p className="text-[#5a5a4e] text-sm leading-relaxed">
+                  Logo, photo de couverture, galerie de plats. Chaque image optimisée pour mobile.
+                </p>
+              </div>
+            </div>
+
+            {/* ⑤ Statistiques */}
+            <div className="relative rounded-2xl overflow-hidden bg-white border border-[#e8e4dc] p-7 flex flex-col justify-between
+                            min-h-[200px] hover:border-[var(--brand)]/30 hover:shadow-md transition-all duration-300 group overflow-hidden">
+              {/* Mini bar chart */}
+              <div className="absolute right-5 bottom-5 flex items-end gap-1.5 opacity-10 group-hover:opacity-20 transition-opacity">
+                {[35, 58, 42, 75, 52, 88, 64].map((h, i) => (
+                  <div key={i} className="w-3 bg-[var(--brand)] rounded-t-sm" style={{ height: h * 0.7 }} />
+                ))}
+              </div>
+              <div className="size-11 rounded-xl bg-[var(--brand-light)] flex items-center justify-center mb-5">
+                <BarChart3 className="size-5 text-[var(--brand)]" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold mb-2">Statistiques de visites</h3>
+                <p className="text-[#5a5a4e] text-sm leading-relaxed">
+                  Visites quotidiennes, plats populaires, heures de pointe. Disponible dès le plan Pro.
+                </p>
+              </div>
+            </div>
+
+            {/* ⑥ Support */}
+            <div className="relative rounded-2xl overflow-hidden bg-[#141412] p-7 flex flex-col justify-between
+                            min-h-[200px] hover:bg-[#1e1e1c] transition-colors duration-300">
+              <div className="size-11 rounded-xl bg-white/10 flex items-center justify-center mb-5">
+                <HeadphonesIcon className="size-5 text-white" />
+              </div>
+              <div>
+                <h3 className="font-heading text-xl font-bold text-white mb-2">Support réactif</h3>
+                <p className="text-white/60 text-sm leading-relaxed mb-4">
+                  Chat et email pour vous accompagner à chaque étape de la configuration.
+                </p>
+                <div className="flex gap-2">
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/80">Chat</span>
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/80">Email</span>
+                  <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-white/80">Onboarding</span>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div className="text-center mt-10">
