@@ -1,8 +1,9 @@
 'use client'
 
 import { create } from 'zustand'
-import { createRestaurant, updateRestaurant } from '@/lib/restaurant'
+import { createRestaurant, updateRestaurant, getLatestDraftRestaurantForOwner } from '@/lib/restaurant'
 import { getFirebaseAuth } from '@/lib/firebase'
+import { onAuthStateChanged, type User } from 'firebase/auth'
 import type { Restaurant, DayOfWeek, DaySchedule } from '@/types/restaurant'
 
 const defaultHours: Record<DayOfWeek, DaySchedule> = {
@@ -27,6 +28,7 @@ interface OnboardingActions {
   setStep: (step: number) => void
   updateFormData: (data: Partial<Restaurant>) => void
   saveToFirestore: () => Promise<void>
+  loadFromFirestore: () => Promise<boolean>
   setRestaurantId: (id: string) => void
   reset: () => void
 }
@@ -55,6 +57,44 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>((s
 
   setRestaurantId: (id) => set({ restaurantId: id }),
 
+  loadFromFirestore: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      const auth = getFirebaseAuth()
+      const currentUser: User | null =
+        auth.currentUser ??
+        (await new Promise<User | null>((resolve) => {
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            unsubscribe()
+            resolve(user)
+          })
+        }))
+
+      if (!currentUser) return false
+      const draft = await getLatestDraftRestaurantForOwner(currentUser.uid)
+      if (!draft) return false
+
+      set((state) => ({
+        restaurantId: draft.id,
+        formData: {
+          ...state.formData,
+          ...draft.data,
+          // garde une structure minimale toujours définie
+          hours: (draft.data as Partial<Restaurant>).hours ?? state.formData.hours,
+          menu: (draft.data as Partial<Restaurant>).menu ?? state.formData.menu,
+          address: (draft.data as Partial<Restaurant>).address ?? state.formData.address,
+        },
+      }))
+      return true
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Erreur de chargement'
+      set({ error: message })
+      return false
+    } finally {
+      set({ isLoading: false })
+    }
+  },
+
   saveToFirestore: async () => {
     set({ isLoading: true, error: null })
     try {
@@ -62,7 +102,20 @@ export const useOnboardingStore = create<OnboardingState & OnboardingActions>((s
       console.log('[Firestore] saveToFirestore appelé', { restaurantId, formData })
 
       const auth = getFirebaseAuth()
-      const ownerId = auth.currentUser?.uid ?? 'anonymous'
+      const currentUser: User | null =
+        auth.currentUser ??
+        (await new Promise<User | null>((resolve) => {
+          const unsubscribe = onAuthStateChanged(auth, (user) => {
+            unsubscribe()
+            resolve(user)
+          })
+        }))
+
+      if (!currentUser) {
+        throw new Error('Vous devez être connecté pour sauvegarder.')
+      }
+
+      const ownerId = currentUser.uid
       console.log('[Firestore] ownerId:', ownerId)
 
       if (!restaurantId) {

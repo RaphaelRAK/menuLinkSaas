@@ -3,10 +3,11 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { ChevronLeft, ChevronRight, Rocket, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Rocket, Check, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useOnboardingStore } from '@/stores/onboardingStore'
 import { updateRestaurant } from '@/lib/restaurant'
+import { useAuth } from '@/contexts/AuthContext'
 
 import { Step1Basics, type Step1Ref } from './steps/Step1Basics'
 import { Step2Location, type Step2Ref } from './steps/Step2Location'
@@ -24,9 +25,23 @@ const STEPS = [
 
 export function OnboardingShell() {
   const router = useRouter()
-  const { currentStep, setStep, saveToFirestore, restaurantId } = useOnboardingStore()
+  const { currentStep, setStep, saveToFirestore, restaurantId, loadFromFirestore } = useOnboardingStore()
+  const { signOut } = useAuth()
   const stepRef = React.useRef<{ validate: () => Promise<boolean> }>(null)
   const [isNavigating, setIsNavigating] = React.useState(false)
+  const [hydrationToken, setHydrationToken] = React.useState(0)
+
+  React.useEffect(() => {
+    // Quand on revient sur l'onboarding, on recharge le brouillon Firestore
+    loadFromFirestore().then((loaded) => {
+      if (loaded) setHydrationToken((t) => t + 1)
+    })
+  }, [loadFromFirestore])
+
+  const handleSignOut = async () => {
+    await signOut()
+    router.push('/auth/login')
+  }
 
   const handleNext = async () => {
     if (isNavigating) return
@@ -77,9 +92,15 @@ export function OnboardingShell() {
           <span className="font-heading font-bold text-xl text-[var(--brand)]">
             Navo
           </span>
-          <span className="text-sm text-muted-foreground font-medium">
-            Étape {currentStep}/{STEPS.length}
-          </span>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <LogOut className="size-4" />
+              Déconnexion
+            </Button>
+            <span className="text-sm text-muted-foreground font-medium">
+              Étape {currentStep}/{STEPS.length}
+            </span>
+          </div>
         </div>
 
         {/* Step dots */}
@@ -134,11 +155,11 @@ export function OnboardingShell() {
 
       {/* Step content */}
       <main className="flex-1 max-w-2xl w-full mx-auto px-4 py-8">
-        {currentStep === 1 && <Step1Basics ref={stepRef as React.RefObject<Step1Ref>} />}
-        {currentStep === 2 && <Step2Location ref={stepRef as React.RefObject<Step2Ref>} />}
-        {currentStep === 3 && <Step3Hours ref={stepRef as React.RefObject<Step3Ref>} />}
-        {currentStep === 4 && <Step4Media ref={stepRef as React.RefObject<Step4Ref>} />}
-        {currentStep === 5 && <Step5Menu ref={stepRef as React.RefObject<Step5Ref>} />}
+        {currentStep === 1 && <Step1Basics key={`s1-${hydrationToken}`} ref={stepRef as React.RefObject<Step1Ref>} />}
+        {currentStep === 2 && <Step2Location key={`s2-${hydrationToken}`} ref={stepRef as React.RefObject<Step2Ref>} />}
+        {currentStep === 3 && <Step3Hours key={`s3-${hydrationToken}`} ref={stepRef as React.RefObject<Step3Ref>} />}
+        {currentStep === 4 && <Step4Media key={`s4-${hydrationToken}`} ref={stepRef as React.RefObject<Step4Ref>} />}
+        {currentStep === 5 && <Step5Menu key={`s5-${hydrationToken}`} ref={stepRef as React.RefObject<Step5Ref>} />}
       </main>
 
       {/* Navigation footer */}

@@ -26,7 +26,11 @@ export interface MenuItem {
   name: string
   description: string
   price: number
+  /**
+   * @deprecated Use imageUrls instead.
+   */
   imageUrl?: string
+  imageUrls?: string[]
   allergens: string[]
   isAvailable: boolean
   options?: MenuItemOption[]

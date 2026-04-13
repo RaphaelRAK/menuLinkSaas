@@ -1,10 +1,11 @@
 'use client'
 
 import * as React from 'react'
+import Image from 'next/image'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Plus, Trash2, X, PencilLine } from 'lucide-react'
+import { Plus, Trash2, X, PencilLine, ImagePlus } from 'lucide-react'
 import { useOnboardingStore } from '@/stores/onboardingStore'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -18,6 +19,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import type { MenuCategory, MenuItem } from '@/types/restaurant'
+import { uploadMenuItemImage } from '@/lib/restaurant'
 
 const ALLERGENS = [
   'Gluten', 'Crustacés', 'Œufs', 'Poisson', 'Arachides',
@@ -49,15 +51,27 @@ interface ItemSheetProps {
   onClose: () => void
   onSave: (item: MenuItem) => void
   initial?: MenuItem
+  categoryName: string
+  ensureRestaurantId: () => Promise<string>
 }
 
-function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
+function toItemLabel(categoryName: string) {
+  const normalized = categoryName.trim().toLowerCase()
+  if (normalized.includes('dessert')) return 'dessert'
+  if (normalized.includes('boisson')) return 'boisson'
+  return 'plat'
+}
+
+function ItemSheet({ open, onClose, onSave, initial, categoryName, ensureRestaurantId }: ItemSheetProps) {
+  const itemLabel = toItemLabel(categoryName)
   const form = useForm<ItemFormValues>({
     resolver: zodResolver(itemSchema),
     defaultValues: initial
       ? { ...initial, options: initial.options ?? [], allergens: initial.allergens }
       : { name: '', description: '', price: 0, isAvailable: true, allergens: [], options: [] },
   })
+  const [imageUrls, setImageUrls] = React.useState<string[]>([])
+  const [isUploadingImage, setUploadingImage] = React.useState(false)
 
   const { fields: optionFields, append: appendOption, remove: removeOption } = useFieldArray({
     control: form.control,
@@ -66,13 +80,17 @@ function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
 
   React.useEffect(() => {
     if (open) {
+      const initialImages =
+        initial?.imageUrls?.slice(0, 3) ??
+        (initial?.imageUrl ? [initial.imageUrl] : [])
+      setImageUrls(initialImages)
       form.reset(
         initial
           ? { ...initial, options: initial.options ?? [], allergens: initial.allergens }
           : { name: '', description: '', price: 0, isAvailable: true, allergens: [], options: [] }
       )
     }
-  }, [open, initial])
+  }, [open, initial, form])
 
   const onSubmit = (values: ItemFormValues) => {
     onSave({
@@ -83,6 +101,8 @@ function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
       isAvailable: values.isAvailable,
       allergens: values.allergens,
       options: values.options.length > 0 ? values.options : undefined,
+      imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+      imageUrl: imageUrls.length > 0 ? imageUrls[0] : undefined,
     })
     onClose()
   }
@@ -100,14 +120,86 @@ function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
 
   const descLength = form.watch('description')?.length ?? 0
 
+  const handleAddImages = async (files: FileList | null) => {
+    if (!files || files.length === 0) return
+    if (imageUrls.length >= 3) return
+
+    setUploadingImage(true)
+    try {
+      const restaurantId = await ensureRestaurantId()
+      const itemId = initial?.id ?? form.getValues('name')?.trim() ? (initial?.id ?? generateId()) : (initial?.id ?? generateId())
+      const remainingSlots = 3 - imageUrls.length
+      const filesToUpload = Array.from(files).slice(0, remainingSlots)
+
+      const newUrls: string[] = []
+      for (const file of filesToUpload) {
+        const index = imageUrls.length + newUrls.length
+        const url = await uploadMenuItemImage({ restaurantId, itemId, file, index })
+        newUrls.push(url)
+      }
+      setImageUrls((prev) => [...prev, ...newUrls].slice(0, 3))
+    } finally {
+      setUploadingImage(false)
+    }
+  }
+
+  const removeImageAt = (index: number) => {
+    setImageUrls((prev) => prev.filter((_, i) => i !== index))
+  }
+
   return (
     <Sheet open={open} onOpenChange={(o) => { if (!o) onClose() }}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+      <SheetContent className="w-full sm:max-w-xl lg:max-w-2xl overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>{initial ? 'Modifier le plat' : 'Nouveau plat'}</SheetTitle>
+          <SheetTitle>{initial ? `Modifier le ${itemLabel}` : `Nouveau ${itemLabel}`}</SheetTitle>
         </SheetHeader>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-6 pb-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-7 mt-6 pb-8">
+          {/* Images */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <Label>Photos (jusqu&apos;à 3)</Label>
+              <label className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--brand)] hover:text-[var(--brand-hover)] cursor-pointer">
+                <ImagePlus className="size-4" />
+                Ajouter
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="sr-only"
+                  onChange={(e) => handleAddImages(e.target.files)}
+                  disabled={isUploadingImage || imageUrls.length >= 3}
+                />
+              </label>
+            </div>
+            {imageUrls.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border p-4 text-sm text-muted-foreground">
+                Ajoute 1 à 3 images pour rendre ce {itemLabel} plus appétissant.
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 gap-2">
+                {imageUrls.map((url, idx) => (
+                  <div key={url} className="relative aspect-square rounded-lg overflow-hidden border border-border bg-muted">
+                    <Image src={url} alt="" fill className="object-cover" sizes="(max-width: 640px) 30vw, 120px" />
+                    <button
+                      type="button"
+                      onClick={() => removeImageAt(idx)}
+                      className="absolute top-1 right-1 size-7 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/75"
+                      aria-label="Supprimer l'image"
+                    >
+                      <X className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {isUploadingImage && (
+              <p className="text-xs text-muted-foreground">Téléversement en cours…</p>
+            )}
+          </div>
+
+          <Separator />
+
           {/* Name */}
           <div className="space-y-1.5">
             <Label>Nom *</Label>
@@ -229,7 +321,7 @@ function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
 
           <div className="pt-2">
             <Button type="submit" className="w-full bg-[var(--brand)] hover:bg-[var(--brand-hover)] text-white border-transparent">
-              {initial ? 'Enregistrer les modifications' : 'Ajouter le plat'}
+              {initial ? 'Enregistrer les modifications' : `Ajouter le ${itemLabel}`}
             </Button>
           </div>
         </form>
@@ -242,7 +334,7 @@ function ItemSheet({ open, onClose, onSave, initial }: ItemSheetProps) {
 export type Step5Ref = { validate: () => Promise<boolean> }
 
 export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
-  const { formData, updateFormData } = useOnboardingStore()
+  const { formData, updateFormData, restaurantId, saveToFirestore } = useOnboardingStore()
 
   const [categories, setCategories] = React.useState<MenuCategory[]>(() => {
     if (formData.menu && formData.menu.length > 0) return formData.menu
@@ -255,7 +347,7 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
   const [newCatName, setNewCatName] = React.useState('')
   const [showCatDialog, setShowCatDialog] = React.useState(false)
   const [deleteCatId, setDeleteCatId] = React.useState<string | null>(null)
-  const [editingItem, setEditingItem] = React.useState<{ catId: string; item?: MenuItem } | null>(null)
+  const [editingItem, setEditingItem] = React.useState<{ catId: string; catName: string; item?: MenuItem } | null>(null)
 
   React.useImperativeHandle(ref, () => ({
     validate: async () => {
@@ -307,6 +399,29 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
     )
   }
 
+  const ensureRestaurantId = async () => {
+    // Les images sont stockées en Storage sous l'id du restaurant
+    // → on force une sauvegarde si l'id n'existe pas encore
+    if (restaurantId) return restaurantId
+    updateFormData({ menu: categories })
+    await saveToFirestore()
+    const nextId = useOnboardingStore.getState().restaurantId
+    if (!nextId) throw new Error('Impossible de créer le restaurant pour stocker les images.')
+    return nextId
+  }
+
+  const activeCategoryName = React.useMemo(() => {
+    const cat = categories.find((c) => c.id === activeTab)
+    return cat?.name ?? 'Plats'
+  }, [categories, activeTab])
+
+  const addItemLabel = React.useMemo(() => {
+    const normalized = activeCategoryName.trim().toLowerCase()
+    if (normalized.includes('dessert')) return 'Ajouter un dessert'
+    if (normalized.includes('boisson')) return 'Ajouter une boisson'
+    return 'Ajouter un plat'
+  }, [activeCategoryName])
+
   return (
     <div className="space-y-6">
       <div>
@@ -316,7 +431,7 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
 
       {categories.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          <p className="mb-4">Aucune catégorie pour l'instant.</p>
+          <p className="mb-4">Aucune catégorie pour l&apos;instant.</p>
           <Button variant="outline" onClick={() => setShowCatDialog(true)}>
             <Plus className="size-4" />
             Ajouter une catégorie
@@ -369,25 +484,47 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
               {cat.items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-start justify-between rounded-xl border border-border bg-white p-4 gap-4"
+                  className="flex items-start justify-between rounded-2xl border border-border bg-white p-5 gap-4 shadow-[0_1px_0_rgba(0,0,0,0.02)]"
                 >
+                  <div className="size-14 rounded-xl overflow-hidden bg-muted border border-border shrink-0">
+                    {item.imageUrls?.[0] || item.imageUrl ? (
+                      <Image
+                        src={(item.imageUrls?.[0] ?? item.imageUrl) as string}
+                        alt=""
+                        width={56}
+                        height={56}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-muted-foreground">
+                        <ImagePlus className="size-5" />
+                      </div>
+                    )}
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-medium text-sm">{item.name}</span>
+                      <span className="font-semibold text-base leading-tight">{item.name}</span>
                       {!item.isAvailable && (
                         <Badge variant="secondary" className="text-xs">Indisponible</Badge>
                       )}
+                      {((item.imageUrls?.length ?? 0) > 1) && (
+                        <Badge variant="outline" className="text-xs">
+                          {(item.imageUrls?.length ?? 0)} photos
+                        </Badge>
+                      )}
                     </div>
                     {item.description && (
-                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{item.description}</p>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
                     )}
-                    <p className="text-sm font-semibold mt-1 text-[var(--brand)]">
-                      {item.price.toFixed(2)} €
-                    </p>
+                    <div className="mt-2">
+                      <span className="inline-flex items-center rounded-full bg-[var(--brand-light)] text-[var(--brand)] px-3 py-1 text-sm font-black">
+                        {item.price.toFixed(2)} €
+                      </span>
+                    </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <button
-                      onClick={() => setEditingItem({ catId: cat.id, item })}
+                      onClick={() => setEditingItem({ catId: cat.id, catName: cat.name, item })}
                       className="size-8 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                       aria-label="Modifier"
                     >
@@ -407,10 +544,10 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
               <Button
                 variant="outline"
                 className="w-full border-dashed"
-                onClick={() => setEditingItem({ catId: cat.id })}
+                onClick={() => setEditingItem({ catId: cat.id, catName: cat.name })}
               >
                 <Plus className="size-4" />
-                Ajouter un plat
+                {addItemLabel}
               </Button>
             </TabsContent>
           ))}
@@ -474,6 +611,8 @@ export const Step5Menu = React.forwardRef<Step5Ref>((_, ref) => {
           onClose={() => setEditingItem(null)}
           onSave={(item) => saveItem(editingItem.catId, item)}
           initial={editingItem.item}
+          categoryName={editingItem.catName}
+          ensureRestaurantId={ensureRestaurantId}
         />
       )}
     </div>
