@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { ArrowRight, Clock, Smartphone, Star, Printer, RefreshCw, QrCode, Eye, MessageSquare } from 'lucide-react'
 
-// ── Phone mockup showing the client-facing MenuLink page ─────────────────────
+// ── Phone mockup showing the client-facing Navo page ─────────────────────
 function PhoneMockup() {
   return (
     <div className="relative mx-auto w-[248px] select-none">
@@ -16,7 +16,7 @@ function PhoneMockup() {
           {/* Status bar */}
           <div className="h-9 bg-[#faf9f6] flex items-center justify-between px-5 pt-1">
             <span className="text-[10px] font-bold text-[#141412]">9:41</span>
-            <span className="text-[9px] text-[#141412]/50 font-medium">menulink.app</span>
+            <span className="text-[9px] text-[#141412]/50 font-medium">navo.app</span>
             <div className="flex items-center gap-1">
               <div className="flex gap-[2px] items-end">
                 {[3, 4, 5, 5].map((h, i) => (
@@ -156,7 +156,7 @@ function QRCodeMockup() {
       </div>
       <div className="text-center">
         <p className="text-[10px] font-bold text-[#141412]">Le Bistrot Créole</p>
-        <p className="text-[9px] text-[#9a9a8e]">menulink.app/bistrot-creole</p>
+        <p className="text-[9px] text-[#9a9a8e]">navo.app/bistrot-creole</p>
       </div>
     </div>
   )

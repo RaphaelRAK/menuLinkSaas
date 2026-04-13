@@ -75,7 +75,7 @@ export function OnboardingShell() {
       <header className="bg-white border-b border-border sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
           <span className="font-heading font-bold text-xl text-[var(--brand)]">
-            MenuLink
+            Navo
           </span>
           <span className="text-sm text-muted-foreground font-medium">
             Étape {currentStep}/{STEPS.length}

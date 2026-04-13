@@ -76,7 +76,7 @@ export const Step1Basics = React.forwardRef<Step1Ref>((_, ref) => {
     <div className="space-y-6">
       <div>
         <h2 className="font-heading text-2xl font-bold">Présentez votre restaurant</h2>
-        <p className="text-muted-foreground mt-1">Ces informations apparaîtront sur votre page MenuLink.</p>
+        <p className="text-muted-foreground mt-1">Ces informations apparaîtront sur votre page Navo.</p>
       </div>
 
       <Form {...form}>
@@ -150,9 +150,9 @@ export const Step1Basics = React.forwardRef<Step1Ref>((_, ref) => {
 
           {/* Slug preview */}
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Votre URL MenuLink</label>
+            <label className="text-sm font-medium">Votre URL Navo</label>
             <div className="flex items-center gap-2 rounded-lg border border-border bg-muted px-3 py-2">
-              <span className="text-muted-foreground text-sm">menulink.app/</span>
+              <span className="text-muted-foreground text-sm">navo.app/</span>
               <span className="text-sm font-medium text-foreground">
                 {slug || <span className="text-muted-foreground italic">votre-restaurant</span>}
               </span>

@@ -26,7 +26,7 @@ const FEATURES_DETAILED = [
     icon: QrCode,
     title: 'QR code personnalisé',
     subtitle: 'De la table à votre page en 2 secondes',
-    description: "Générez votre QR code MenuLink en un clic. Téléchargez un PDF prêt à imprimer avec 4 QR codes par page, dimensionnés pour vos tables. Plastifiez-les et posez-les : vos clients accèdent à votre menu instantanément, sans télécharger d'application.",
+    description: "Générez votre QR code Navo en un clic. Téléchargez un PDF prêt à imprimer avec 4 QR codes par page, dimensionnés pour vos tables. Plastifiez-les et posez-les : vos clients accèdent à votre menu instantanément, sans télécharger d'application.",
     items: [
       'PDF prêt à imprimer, 4 QR codes par page',
       'Compatible tous smartphones (iOS et Android)',
@@ -88,10 +88,10 @@ const FEATURES_DETAILED = [
     icon: HeadphonesIcon,
     title: 'Support dédié',
     subtitle: 'Jamais seul face à un problème',
-    description: 'Notre équipe est disponible 7j/7 par chat et email. Nous vous accompagnons lors de la prise en main, répondons à vos questions en moins d\'une heure et résolvons tout blocage rapidement. Les clients Business bénéficient d\'un gestionnaire de compte dédié.',
+    description: "Notre équipe est disponible par chat et email. Nous vous accompagnons lors de la prise en main, répondons à vos questions et résolvons tout blocage. Les clients Business bénéficient d'un gestionnaire de compte dédié.",
     items: [
-      'Chat en ligne 7j/7',
-      'Email avec réponse < 1h',
+      'Chat en ligne',
+      'Email avec réponse rapide',
       'Session d\'onboarding individuelle (Pro+)',
       'Documentation complète et tutoriels vidéo',
       'Gestionnaire dédié (Business)',
@@ -103,8 +103,8 @@ const FEATURES_DETAILED = [
 ]
 
 const EXTRAS = [
-  { icon: Smartphone, title: 'Optimisé mobile', description: 'Chaque page MenuLink est pensée pour mobile first. Rapide, lisible, sans application.' },
-  { icon: Globe, title: 'Lien partageable', description: 'menulink.app/votre-restaurant — à coller sur Instagram, Google My Business, WhatsApp.' },
+  { icon: Smartphone, title: 'Optimisé mobile', description: 'Chaque page Navo est pensée pour mobile first. Rapide, lisible, sans application.' },
+  { icon: Globe, title: 'Lien partageable', description: 'navo.app/votre-restaurant — à coller sur Instagram, Google My Business, WhatsApp.' },
   { icon: Zap, title: 'Mise à jour instantanée', description: 'Un changement depuis votre back-office est visible en temps réel sur la page client.' },
 ]
 
@@ -120,7 +120,7 @@ export default function FonctionnalitesPage() {
             <span className="text-[var(--brand)] block">briller en ligne</span>
           </h1>
           <p className="text-[#5a5a4e] text-xl max-w-xl mx-auto leading-relaxed">
-            MenuLink réunit tout ce dont un restaurant a besoin pour sa présence digitale. Simple à configurer, puissant à l'usage.
+            Navo réunit tout ce dont un restaurant a besoin pour sa présence digitale. Simple à configurer, puissant à l'usage.
           </p>
         </div>
       </section>

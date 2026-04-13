@@ -19,7 +19,7 @@ function MarketingNav() {
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#ede9e2]">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-heading font-black text-xl text-[var(--brand)]">
-          MenuLink
+          Navo
         </Link>
 
         <nav className="hidden md:flex items-center gap-7">
@@ -78,7 +78,7 @@ function MarketingFooter() {
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row items-start justify-between gap-10 mb-10">
           <div className="max-w-xs">
-            <span className="font-heading font-black text-xl text-[var(--brand)] block mb-3">MenuLink</span>
+            <span className="font-heading font-black text-xl text-[var(--brand)] block mb-3">Navo</span>
             <p className="text-sm leading-relaxed">
               La plateforme qui connecte les restaurateurs à leurs futurs clients.
             </p>
@@ -110,7 +110,7 @@ function MarketingFooter() {
           </div>
         </div>
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <p>© {new Date().getFullYear()} MenuLink. Tous droits réservés.</p>
+          <p>© {new Date().getFullYear()} Navo. Tous droits réservés.</p>
           <p>Hébergé en Europe · Données chiffrées · RGPD</p>
         </div>
       </div>

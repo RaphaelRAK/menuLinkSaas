@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'MenuLink — Votre restaurant sur le web',
+  title: 'Navo — Votre restaurant sur le web',
   description: 'Créez la page en ligne de votre restaurant en 5 minutes.',
 }
 

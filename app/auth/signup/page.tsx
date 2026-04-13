@@ -43,7 +43,7 @@ export default function SignupPage() {
     setIsLoading(true)
     try {
       await signUp(values.email, values.password)
-      toast.success('Compte créé ! Bienvenue sur MenuLink.')
+      toast.success('Compte créé ! Bienvenue sur Navo.')
       router.push('/onboarding')
     } catch (err: unknown) {
       const code = (err as { code?: string })?.code ?? ''

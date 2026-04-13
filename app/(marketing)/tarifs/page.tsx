@@ -22,7 +22,7 @@ const PLANS = [
       'Photos illimitées': false,
       'Statistiques de visites': false,
       'QR code personnalisé': false,
-      'Badge Certifié MenuLink': false,
+      'Badge Certifié Navo': false,
       "Jusqu'à 5 établissements": false,
       'Intégration caisse': false,
       'Campagnes email': false,
@@ -49,7 +49,7 @@ const PLANS = [
       'Photos illimitées': true,
       'Statistiques de visites': true,
       'QR code personnalisé': true,
-      'Badge Certifié MenuLink': true,
+      'Badge Certifié Navo': true,
       "Jusqu'à 5 établissements": false,
       'Intégration caisse': false,
       'Campagnes email': false,
@@ -74,7 +74,7 @@ const PLANS = [
       'Photos illimitées': true,
       'Statistiques de visites': true,
       'QR code personnalisé': true,
-      'Badge Certifié MenuLink': true,
+      'Badge Certifié Navo': true,
       "Jusqu'à 5 établissements": true,
       'Intégration caisse': true,
       'Campagnes email': true,
@@ -94,7 +94,7 @@ const ALL_FEATURES = [
   { label: 'Photos illimitées', category: 'Pro' },
   { label: 'Statistiques de visites', category: 'Pro' },
   { label: 'QR code personnalisé', category: 'Pro' },
-  { label: 'Badge Certifié MenuLink', category: 'Pro' },
+  { label: 'Badge Certifié Navo', category: 'Pro' },
   { label: "Jusqu'à 5 établissements", category: 'Business' },
   { label: 'Intégration caisse', category: 'Business' },
   { label: 'Campagnes email', category: 'Business' },
@@ -121,7 +121,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Que se passe-t-il si je résilie ?',
-    answer: 'Votre compte reste actif jusqu\'à la fin de la période payée. Après résiliation, votre page MenuLink est désactivée mais vos données sont conservées 30 jours — vous pouvez réactiver votre compte sans rien reconfigurer.',
+    answer: 'Votre compte reste actif jusqu\'à la fin de la période payée. Après résiliation, votre page Navo est désactivée mais vos données sont conservées 30 jours — vous pouvez réactiver votre compte sans rien reconfigurer.',
   },
 ]
 
@@ -295,7 +295,7 @@ export default function TarifsPage() {
           {[
             { icon: Shield, title: '30 jours satisfait ou remboursé', desc: 'Si vous n\'êtes pas satisfait dans les 30 jours suivant votre premier paiement, nous vous remboursons intégralement.' },
             { icon: RefreshCw, title: 'Résiliation en 1 clic', desc: 'Pas de formulaire, pas de délai, pas de frais. Résiliez quand vous voulez depuis votre espace en quelques secondes.' },
-            { icon: Headphones, title: 'Support 7j/7', desc: 'Une vraie équipe humaine, disponible par chat et email tous les jours pour vous accompagner.' },
+            { icon: Headphones, title: 'Support réactif', desc: 'Une vraie équipe humaine, disponible par chat et email pour répondre à vos questions.' },
           ].map(({ icon: Icon, title, desc }) => (
             <div key={title} className="p-6 rounded-2xl bg-[#faf9f6] border border-[#ede9e2]">
               <div className="size-12 rounded-xl bg-[var(--brand-light)] flex items-center justify-center mx-auto mb-4">

@@ -32,13 +32,13 @@ const STEPS = [
   {
     number: '03',
     title: 'Publiez et rendez-vous visible',
-    description: 'Votre page est en ligne. Partagez votre lien MenuLink sur vos réseaux et affichez votre QR code en salle.',
+    description: 'Votre page est en ligne. Partagez votre lien Navo sur vos réseaux et affichez votre QR code en salle.',
   },
 ]
 
 const FEATURES = [
   { icon: UtensilsCrossed, title: 'Menu en ligne complet', description: 'Catégories, descriptions, allergènes, variantes de prix. Un menu toujours à jour, accessible en un clic.' },
-  { icon: QrCode, title: 'QR Code à imprimer', description: 'Générez votre QR code MenuLink et imprimez-le sur vos tables, cartes de visite et supports physiques.' },
+  { icon: QrCode, title: 'QR Code à imprimer', description: 'Générez votre QR code Navo et imprimez-le sur vos tables, cartes de visite et supports physiques.' },
   { icon: Clock, title: 'Horaires dynamiques', description: "Gérez vos horaires jour par jour, service du midi et du soir, jours fériés. Vos clients savent toujours quand venir." },
   { icon: ImageIcon, title: 'Photos haute définition', description: "Logo, photo de couverture, galerie de plats. Une présentation visuelle soignée, optimisée pour mobile." },
   { icon: BarChart3, title: 'Statistiques de visites', description: 'Suivez les visites de votre page et les plats les plus consultés pour affiner votre offre.' },
@@ -70,7 +70,7 @@ const PLANS = [
       'Photos illimitées',
       'Statistiques de visites',
       'QR code personnalisé',
-      'Badge MenuLink vérifié',
+      'Badge Navo vérifié',
       'Support prioritaire',
     ],
     cta: 'Commencer l\'essai gratuit',
@@ -122,8 +122,8 @@ const FAQ_ITEMS = [
     answer: "Absolument. Vous pouvez upgrader, downgrader ou résilier votre abonnement à tout moment depuis votre espace. La résiliation prend effet à la fin de la période en cours. Aucun frais de sortie.",
   },
   {
-    question: "Comment mes clients accèdent-ils à ma page MenuLink ?",
-    answer: "Votre page est accessible via un lien unique (menulink.app/votre-restaurant) et via le QR code que vous pouvez imprimer sur vos supports. Vos clients n'ont besoin d'aucune application.",
+    question: "Comment mes clients accèdent-ils à ma page Navo ?",
+    answer: "Votre page est accessible via un lien unique (navo.app/votre-restaurant) et via le QR code que vous pouvez imprimer sur vos supports. Vos clients n'ont besoin d'aucune application.",
   },
   {
     question: "Mes données sont-elles sécurisées ?",
@@ -194,7 +194,7 @@ export default function LandingPage() {
             'font-heading font-black text-xl tracking-tight transition-colors',
             scrolled ? 'text-[var(--brand)]' : 'text-white',
           ].join(' ')}>
-            MenuLink
+            Navo
           </span>
 
           {/* Desktop nav */}
@@ -627,7 +627,7 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <p className="text-[var(--brand)] font-semibold text-sm tracking-widest uppercase mb-3">Pour votre établissement</p>
             <h2 className="font-heading text-4xl md:text-5xl font-black tracking-tight text-white">
-              Ce que MenuLink
+              Ce que Navo
               <span className="block text-[var(--brand)]">vous apporte concrètement</span>
             </h2>
             <p className="text-white/60 mt-4 max-w-md mx-auto text-sm leading-relaxed">
@@ -696,7 +696,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-start justify-between gap-10 mb-10">
             <div className="max-w-xs">
-              <span className="font-heading font-black text-xl text-[var(--brand)] block mb-3">MenuLink</span>
+              <span className="font-heading font-black text-xl text-[var(--brand)] block mb-3">Navo</span>
               <p className="text-sm leading-relaxed">
                 La plateforme qui simplifie la présence en ligne des restaurateurs.
               </p>
@@ -730,7 +730,7 @@ export default function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-            <p>© {new Date().getFullYear()} MenuLink. Tous droits réservés.</p>
+            <p>© {new Date().getFullYear()} Navo. Tous droits réservés.</p>
             <p>Hébergé en Europe · Données chiffrées · RGPD</p>
           </div>
         </div>
